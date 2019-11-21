@@ -12,7 +12,7 @@ const NavStack = createStackNavigator(
   },
   {
     initialRouteName: 'Home',
-    // headerMode: 'none',
+    headerMode: 'none',
   },
 );
 

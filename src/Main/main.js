@@ -24,6 +24,13 @@ const Main = props => {
           placeholder={'ADD TO DO ...'}
           placeholderTextColor="black"
         />
+        <TextInput
+          style={{borderWidth: 0.5, borderRadius: 30, height: 40}}
+          onChangeText={text => props.textSearch(text)}
+          multiline={true}
+          placeholder={'SEARCH TO DO ...'}
+          placeholderTextColor="black"
+        />
       </View>
       <View style={{width: '15%', position: 'relative'}}>
         <TouchableOpacity

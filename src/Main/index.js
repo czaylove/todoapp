@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
   ImageBackground,
   Button,
   TouchableOpacity,
+  ScrollView,
   AsyncStorage,
 } from 'react-native';
 import Main from './main';
@@ -18,8 +19,8 @@ export default class Home extends React.Component {
       todoInput: '',
       dataA: null,
       todos: [
-        {id: 1, title: 'Todo List', done: false},
         {id: 0, title: 'Todo App', done: false},
+        {id: 1, title: 'Todo List', done: false},
       ],
     };
   }
@@ -67,18 +68,20 @@ export default class Home extends React.Component {
         console.log('value', value);
         const getValues = JSON.parse(value);
         console.log('getValue: ', getValues);
-        this.setState({todos: getValues});
-        return getValues;
+        this.setState({todos: 'getValues'});
       } catch (error) {
         // Error retrieving data
       }
     })();
   }
-
+  hanldeSeach(text) {
+    const formatQuery = text.toLowerCase();
+    console.log('text ', text);
+  }
   render() {
     // const statusbar = (Platform.OS=='ios') ? <View><Text>Test</Text></View> : <View></View>;
-    console.log('dataA: ', this.state.todos);
-
+    console.log('dataA: ', this.state.dataA);
+    console.log('valueTodo', this.state.todos);
     return (
       <ImageBackground
         source={{
@@ -90,6 +93,7 @@ export default class Home extends React.Component {
           <View>
             <Main
               textChange={todoInput => this.setState({todoInput})}
+              textSearch={text => this.hanldeSeach(text)}
               addNewtodo={() => this.addNewtodo()}>
               <Text>{this.props.todoInput}</Text>
             </Main>
@@ -108,39 +112,34 @@ export default class Home extends React.Component {
                 </Text>
               </View>
             </View>
-            <Button
-              title="1"
-              onPress={() => console.log(':', this.state.todos)}
-            />
+            <Button title="1" onPress={() => console.log(':', this.todos)} />
             {/* list */}
-            <FlatList
-              style={{
-                paddingLeft: 20,
-                paddingRight: 20,
-                height: '68%',
-              }}
-              data={this.state.todos}
-              ListEmptyComponent={() => (
-                <View>
-                  <Text>Empty List</Text>
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item, index}) => {
-                return (
-                  <Note
-                    todoItem={item}
-                    toggleDone={() => this.toggleDone(item)}
-                    remove={() => this.remove(item)}
-                  />
-                );
-              }}
-            />
+            <ScrollView>
+              <FlatList
+                style={{
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  height: '68%',
+                }}
+                data={this.state.todos}
+                ListEmptyComponent={() => (
+                  <View>
+                    <Text>Empty List</Text>
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item, index}) => {
+                  return (
+                    <Note
+                      todoItem={item}
+                      toggleDone={() => this.toggleDone(item)}
+                      remove={() => this.remove(item)}
+                    />
+                  );
+                }}
+              />
+            </ScrollView>
           </View>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Add')}>
-            <Text>log</Text>
-          </TouchableOpacity>
         </View>
       </ImageBackground>
     );
